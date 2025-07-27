@@ -1,0 +1,344 @@
+/* -------- RESET E BASE -------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0a192f;
+  color: #e6f1ff;
+  line-height: 1.6;
+  padding: 20px;
+}
+
+/* -------- CABEÇALHO -------- */
+header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+header h1 {
+  font-size: 2.5rem;
+  color: #90cfcf;
+}
+header p {
+  color: #8892b0;
+  font-size: 1.2rem;
+}
+
+/* -------- TÍTULOS -------- */
+h2 {
+  font-size: 2rem;
+  color: #90cfcf;
+  margin-bottom: 20px;
+  text-align: center;
+  position: relative;
+}
+h2::before {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: #90cfcf;
+  margin: 0 auto 10px;
+  border-radius: 2px;
+}
+h3 {
+  color: #e6f1ff;
+  font-size: 1.5rem;
+  margin-top: 25px;
+}
+
+/* -------- INTRODUÇÃO -------- */
+.intro-content {
+  display: flex;              
+  flex-direction: row;        
+  align-items: center;      
+  gap: 20px;                  
+  margin-bottom: 40px;
+  animation: fadeInUp 1s ease;
+  text-align: left;          
+}
+
+.intro-image, .failures-image {
+  width: 300px;              
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(100, 255, 218, 0.2);
+  flex-shrink: 0;           
+  margin: 0;                 
+}
+
+.intro-content p {
+  flex: 1;                  
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: #cbd5e1;
+  max-width: 800px;
+  margin: 0;                 
+}
+
+/* -------- ANIMAÇÕES GERAIS -------- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* -------- TRATADOS INTERATIVOS -------- */
+.treaty-block h3 {
+  cursor: pointer;
+  background-color: #1c2230;
+  padding: 12px 20px;
+  border-radius: 8px;
+  color: #90cfcf;
+  margin-top: 15px;
+  transition: background 0.3s ease;
+}
+.treaty-block h3:hover {
+  background-color: #243049;
+}
+.treaty-content {
+  background-color: #2a3448;
+  color: #e6f1ff;
+  padding: 15px 20px;
+  border-left: 4px solid #90cfcf;
+  border-radius: 8px;
+  margin-top: 8px;
+  animation: fadeIn 0.4s ease;
+}
+.hidden {
+  display: none;
+}
+
+/* -------- CARDS FUN FACTS -------- */
+.card-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+.card {
+  width: 200px;
+  height: 120px;
+  perspective: 1000px;
+  cursor: pointer;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease;
+}
+.card-front,
+.card-back {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  border-radius: 10px;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+.card-front {
+  background-color: #3f3d56;
+  color: #ffffff;
+}
+.card-back {
+  background-color: #90cfcf;
+  color: #0a192f;
+  transform: rotateY(180deg);
+}
+.card.flipped {
+  transform: rotateY(180deg);
+}
+
+/* -------- PARÁGRAFOS -------- */
+p {
+  margin-top: 10px;
+  font-size: 1.05rem;
+  color: #cbd5e1;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* -------- SEÇÕES -------- */
+section {
+  margin-bottom: 60px;
+}
+
+section img:not(.intro-image) {
+  display: block;
+  margin: 0 auto 20px auto;
+  max-width: 90%;
+  height: auto;
+}
+
+.intro-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 40px;
+  text-align: left;
+}
+
+.intro-image {
+  display: inline-block;
+}
+
+.intro-image.center-image {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hidden {
+  display: none;
+}
+
+.treaty-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 30px 0;
+}
+
+.treaty-buttons button {
+  background-color: #3a3758;
+  color: #ffffff;
+  border: none;
+  padding: 14px 22px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.treaty-buttons button:hover {
+  background-color: #4a4478;
+  transform: scale(1.05);
+}
+
+.treaty-conent {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+#click-to-see-details {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: white
+}
+
+.treaty-title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  color: #fff;
+  font-family: 'Arial', sans-serif;
+  overflow: hidden;
+}
+
+#timeline-container {
+  width: 80%; 
+  margin: 20px auto;
+  text-align: center;
+  z-index: 10;
+  color: white;
+}
+
+#year-slider {
+  width: 70%;
+  height: 8px;
+  -webkit-appearance: none;
+  background: linear-gradient(to right, #0ff, #00f);
+  border-radius: 5px;
+  outline: none;
+  transition: background 0.3s ease;
+  cursor: pointer;
+  margin-top: 8px;
+}
+#year-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border: 2px solid #00f;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+#year-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border: 2px solid #00f;
+  border-radius: 50%;
+  cursor: pointer;
+}
+#year-label {
+  margin-top: 10px;
+  font-size: 18px;
+  color: rgb(165, 210, 210);
+  font-weight: bold;
+}
+#info-panel {
+  bottom: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 16px;
+  box-shadow: 0 0 10px rgb(165, 210, 210);
+  z-index: 10;
+  size-adjust: auto;
+}
+#info-panel p {
+  margin: 5px 0;
+}
+
+#globe-canvas {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: transparent;
+}
+
