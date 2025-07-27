@@ -1,94 +1,136 @@
-function toggleFact(card) {
-  card.classList.toggle('flipped');
-}
+// script.js
 
-function toggleTreaty(treatyId) {
-  const allTreaties = ['outerspace', 'rescue', 'liability', 'registration', 'moon'];
-  allTreaties.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.classList.add('hidden');
-  });
-  const selected = document.getElementById(treatyId);
-  if (selected) selected.classList.remove('hidden');
-}
 
 const yearSlider = document.getElementById('year-slider');
 const yearValue = document.getElementById('year-value');
 const satelliteCount = document.getElementById('satellite-count');
 const debrisCount = document.getElementById('debris-count');
 
-let scene, camera, renderer, earth, debrisGroup;
+const treatyButtons = document.querySelectorAll('.treaty-buttons button');
+const treatyContents = document.querySelectorAll('.treaty-content');
 
-init();
-animate();
+const cards = document.querySelectorAll('.card');
 
-function init() {
-  scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.z = 5;
-
-  renderer = new THREE.WebGLRenderer({
-    canvas: document.getElementById('globe-canvas'),
-    alpha: true,
-    antialias: true
-  });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-
-  const geometry = new THREE.SphereGeometry(1, 32, 32);
-  const material = new THREE.MeshBasicMaterial({ color: 0x0077be, wireframe: true });
-  earth = new THREE.Mesh(geometry, material);
-  scene.add(earth);
-
-  debrisGroup = new THREE.Group();
-  scene.add(debrisGroup);
-
-  yearSlider.addEventListener('input', onYearChange);
-  onYearChange();
-
-  // Move timeline after introduction
-  const intro = document.getElementById('intro');
-  const timeline = document.getElementById('timeline-container');
-  if (intro && timeline) {
-    intro.parentNode.insertBefore(timeline, intro.nextSibling);
+function getSatelliteCount(year) {
+  
+  if (year < 1990) {
+    
+    return Math.floor(10 + (year - 1960) * 5);
+  } else if (year < 2010) {
+    
+    return Math.floor(160 + (year - 1990) * 200);
+  } else if (year <= 2025) {
+    
+    return Math.floor(4160 + (year - 2010) * 600);
+  } else {
+   
+    return 15000;
   }
 }
 
-function onYearChange() {
-  const year = parseInt(yearSlider.value);
+function getDebrisCount(year) {
+  if (year < 1990) {
+    return Math.floor((year - 1960) * 0.1); 
+  } else if (year < 2010) {
+    return Math.floor(3 + (year - 1990) * 2); 
+  } else if (year <= 2025) {
+    
+    let yearsAfter2010 = year - 2010;
+    return Math.floor(43 * Math.pow(1.2, yearsAfter2010)); 
+  } else {
+    return 130; 
+  }
+}
+
+yearSlider.addEventListener('input', () => {
+  const year = +yearSlider.value;
   yearValue.textContent = year;
 
-  const satellites = Math.floor((year - 1960) * 5);
-  const debris = year - 1950;
+  satelliteCount.textContent = getSatelliteCount(year);
+  debrisCount.textContent = getDebrisCount(year);
 
-  satelliteCount.textContent = satellites;
-  debrisCount.textContent = debris;
+  updateGlobe(year);
+});
 
-  while (debrisGroup.children.length > 0) {
-    const obj = debrisGroup.children[0];
-    debrisGroup.remove(obj);
-    obj.geometry.dispose();
-    obj.material.dispose();
-  }
+function toggleTreaty(treatyId) {
+  treatyContents.forEach(content => {
+    if(content.id === treatyId) {
+      content.classList.toggle('hidden');
+    } else {
+      content.classList.add('hidden');
+    }
+  });
+}
 
-  for (let i = 0; i < debris; i++) {
-    const geometry = new THREE.SphereGeometry(0.02, 8, 8);
-    const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
-    const mesh = new THREE.Mesh(geometry, material);
+cards.forEach(card => {
+  card.addEventListener('click', () => {
+    card.classList.toggle('flipped');
+  });
+});
 
-    const radius = Math.random() * 2 + 1.2;
-    const phi = Math.random() * Math.PI;
-    const theta = Math.random() * 2 * Math.PI;
 
-    mesh.position.x = radius * Math.sin(phi) * Math.cos(theta);
-    mesh.position.y = radius * Math.sin(phi) * Math.sin(theta);
-    mesh.position.z = radius * Math.cos(phi);
+let scene, camera, renderer;
+let globe;
+let animationId;
 
-    debrisGroup.add(mesh);
-  }
+function initGlobe() {
+  const canvas = document.getElementById('globe-canvas');
+
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.z = 3;
+
+  renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+  scene.add(ambientLight);
+
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  directionalLight.position.set(5, 3, 5);
+  scene.add(directionalLight);
+
+  const geometry = new THREE.SphereGeometry(1, 64, 64);
+  const textureLoader = new THREE.TextureLoader();
+
+  const earthTexture = textureLoader.load('https://cdn.jsdelivr.net/gh/jeromeetienne/threex.planets@master/images/earthmap1k.jpg');
+  const earthMaterial = new THREE.MeshPhongMaterial({ map: earthTexture });
+
+  globe = new THREE.Mesh(geometry, earthMaterial);
+  scene.add(globe);
+
+  animate();
 }
 
 function animate() {
-  requestAnimationFrame(animate);
-  earth.rotation.y += 0.001;
+  animationId = requestAnimationFrame(animate);
+
+  globe.rotation.y += 0.0015;
+
   renderer.render(scene, camera);
 }
+
+function updateGlobe(year) {
+  
+  const scale = 1 + (getSatelliteCount(year) / 500);
+  globe.scale.set(scale, scale, scale);
+}
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  yearValue.textContent = yearSlider.value;
+  satelliteCount.textContent = getSatelliteCount(+yearSlider.value);
+  debrisCount.textContent = getDebrisCount(+yearSlider.value);
+
+  initGlobe();
+
+  treatyButtons.forEach(button => {
+    button.addEventListener('click', () => toggleTreaty(button.getAttribute('onclick').match(/'([^']+)'/)[1]));
+  });
+});
