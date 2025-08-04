@@ -1,3 +1,4 @@
+/* -------- RESET E BASE -------- */
 * {
   margin: 0;
   padding: 0;
@@ -50,6 +51,7 @@ h3 {
   color: #e6f1ff;
   font-size: 1.5rem;
   margin-top: 25px;
+  text-align: center;
 }
 
 /* -------- INTRODUÇÃO -------- */
@@ -329,5 +331,7 @@ section img:not(.intro-image) {
   border-radius: 8px;
   box-shadow: none;
 }
+
+
 
 
